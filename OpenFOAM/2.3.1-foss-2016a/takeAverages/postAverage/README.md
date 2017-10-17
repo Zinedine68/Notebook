@@ -11,7 +11,7 @@ An app version of fieldAverage.
 A dictionary in system/controDict 
 Object to be averaged can be scalar, vector or tensor.
 
-## Input
+## Output
 Mean Prime2Mean 
 
 ## How
