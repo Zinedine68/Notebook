@@ -21,6 +21,7 @@ post        : postAverage
 1. Same as fieldAverage
 2. The field to be averaged needs to be added to createFields.H and thus recompile the app
 3. in the dictionary : `ouputControl timeStep;` is needed.
+4. Executing postAverage will execute also all other functionObjects in controlDict
 
 # Cope with limit
 Same as fieldAverage
