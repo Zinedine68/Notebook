@@ -28,7 +28,7 @@
     );
 
     Info<< "Reading field U2\n" << endl;
-    volVectorField pB
+    volVectorField U2
     (
         IOobject
         (
@@ -42,7 +42,7 @@
     );
 
     Info<< "Reading field U3\n" << endl;
-    volVectorField B
+    volVectorField U3
     (
         IOobject
         (
