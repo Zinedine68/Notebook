@@ -42,7 +42,7 @@ Just for the first one `mesh.Cf().boundaryField()[w0PatchID]`
 `FieldField<PatchField, Type>` which will here be instantiated as `FieldField<fvsPatchField, vector>` inheritated from `PtrList<Field<Type> >`
 which is instantiated as `PtrList<fvsPatchField<vector> >`.   
 Now, access an element of `fvsPatchVectorField` is to access an element of `PtrList<fvsPatchField<vector> >` object using its `operator[]`. The type
-of the element is `fvsPatchField<vector>`. As the argument is `const`, it is of type `const fvsPatchField<vector>`. 
+of the element is `fvsPatchField<vector>`. As the argument is `const`, it is of type `const fvsPatchField<vector>`which is then `fvsPatchVectorField`.
 
 **Why not a pointer? See Annexe**.
 
