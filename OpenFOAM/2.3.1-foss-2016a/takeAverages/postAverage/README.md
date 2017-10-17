@@ -18,8 +18,9 @@ Mean Prime2Mean
 post        : postAverage
 
 ## Limit
-Same as fieldAverage
-The field to be averaged needs to be added to createFields.H and thus recompile the app
+1. Same as fieldAverage
+2. The field to be averaged needs to be added to createFields.H and thus recompile the app
+3. in the dictionary : `ouputControl timeStep;` is needed.
 
 # Cope with limit
 Same as fieldAverage
