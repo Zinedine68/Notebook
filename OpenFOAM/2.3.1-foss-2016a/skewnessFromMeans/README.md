@@ -1,4 +1,4 @@
-# skewnessFromMeans : need to check for results
+# skewnessFromMeans : does not give right results
 
 ## source
 modify from vortcity.C
