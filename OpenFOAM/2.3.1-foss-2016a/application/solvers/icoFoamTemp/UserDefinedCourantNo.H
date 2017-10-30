@@ -76,6 +76,9 @@ if (mesh.nInternalFaces())
 	Info<< "Courant number mean: " << meanCoNum
 	<< " max: " << CoNum << endl;
 
+	// if commment the following 4 lines, CFLField will still be written by object runTime 
+	// but every timeStep ignoring outputTime in controDict. Maybe because it's value is 
+	// dependant on U and U is calculated and updated every time step.
 	if(runTime.outputTime())
 	{
 		CFLField.write(); 
