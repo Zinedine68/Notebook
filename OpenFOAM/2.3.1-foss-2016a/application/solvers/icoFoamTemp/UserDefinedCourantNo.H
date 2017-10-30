@@ -48,9 +48,11 @@ if (mesh.nInternalFaces())
 	//scalarField CFLField = 0.5*(sumPhi/mesh.V().field())*runTime.deltaTValue();  // this works for value conversion but CFLField is then permenantly downgraded to a scalar 
 	//volScalarField CFLField(0.5*(sumPhi/mesh.V().field())*runTime.deltaTValue());
 	CFLField.internalField() = 0.5*(sumPhi/mesh.V().field())*runTime.deltaTValue();
+	/*
 	Info << "here is the CFL"
 			<< CFLField
 			<< endl;
+	*/
 	Info << "end " << endl;
 	Info << "size of CFLField" << CFLField.size() << endl;
 	Info << "size of CFLField.internalField()" << CFLField.internalField().size() << endl;
@@ -71,10 +73,13 @@ if (mesh.nInternalFaces())
 	*/
 }
 
-Info<< "Courant number mean: " << meanCoNum
-    << " max: " << CoNum << endl;
+	Info<< "Courant number mean: " << meanCoNum
+	<< " max: " << CoNum << endl;
 
-CFLField.write(); // didn't write out anything but repeting 0/*
+	if(runTime.outputTime())
+	{
+		CFLField.write(); 
+	}
 
 //Info<< "Gravity wave Courant number max: " << waveCoNum
 //    << endl;
