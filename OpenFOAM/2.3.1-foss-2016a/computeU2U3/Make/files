@@ -1,3 +1,0 @@
-computeU2U3.C
-
-EXE = $(FOAM_USER_APPBIN)/computeU2U3
