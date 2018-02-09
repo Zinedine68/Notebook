@@ -181,6 +181,21 @@ int main(int argc, char *argv[])
             dimensionedScalar("uTau", UMean.dimensions(), 0.0)
         );
 
+        volVectorField coor
+        (
+           IOobject
+           (
+               "coor",
+               runTime.timeName(),
+               mesh,
+               IOobject::NO_READ,
+               IOobject::AUTO_WRITE
+               ),
+               mesh,
+			   dimensionedVector("coor", dimLength, vector(0.0 , 0.0 , 0.0))
+			   //dimensionedVector("coor", dimLength, (0.0 , 0.0 , 0.0)) // this doesn't work
+         );
+
         // Get index of patch
 
         const word w0("Port1");
@@ -242,7 +257,7 @@ int main(int argc, char *argv[])
             		// this is for internal mesh and uses the global label list
             		//Info << "coordinates : " << mesh.C()[faceI] << endl;
             		// this is for boundary mesh
-            		if (currPatch.Cf()[faceI].component(vector::Z) < 0.0003
+            		if (currPatch.Cf()[faceI].component(vector::Z) < 0.0005
             				&&
 						currPatch.Cf()[faceI].component(vector::Z) > 0	)
             		{
@@ -263,6 +278,8 @@ int main(int argc, char *argv[])
                         " " << currPatch.Cf()[myList[i]].component(vector::Y) <<
                         " " << currPatch.Cf()[myList[i]].component(vector::Z) << endl;
                 }
+
+                coor.boundaryField()[patchI]=currPatch.Cf();
 
             	/*
             	// if vect is one random point, findCell will return global label
@@ -324,7 +341,7 @@ int main(int argc, char *argv[])
                         " " << d[patchI][faceI] << endl;
                     
                 }
-                                                                                                                               }
+                coor.write();                                                                                                                }
 
     }
 
