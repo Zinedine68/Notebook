@@ -181,18 +181,18 @@ int main(int argc, char *argv[])
             dimensionedScalar("uTau", UMean.dimensions(), 0.0)
         );
 
-        volVectorField coor
+        volScalarField r
         (
            IOobject
            (
-               "coor",
+               "r",
                runTime.timeName(),
                mesh,
                IOobject::NO_READ,
                IOobject::AUTO_WRITE
                ),
                mesh,
-			   dimensionedVector("coor", dimLength, vector(0.0 , 0.0 , 0.0))
+			   dimensionedScalar("r", dimLength, scalar(0.0))
 			   //dimensionedVector("coor", dimLength, (0.0 , 0.0 , 0.0)) // this doesn't work
          );
 
@@ -251,6 +251,9 @@ int main(int argc, char *argv[])
             			<< " size = " << currPatch.size() << endl;
 
         		labelList myList;
+        		scalar x,y,z;
+        		vector ctr(0, -0.2, 0);
+        		Info << "magnitude : " << mag(ctr) << endl;
 
             	forAll(currPatch, faceI)
             	{
@@ -264,6 +267,12 @@ int main(int argc, char *argv[])
                 		//Info << "coordinates : " << faceI << " " << currPatch.Cf()[faceI] << endl;
                 		myList.append(faceI);
             		}
+
+            		x = currPatch.Cf()[faceI].component(vector::X);
+            		y = currPatch.Cf()[faceI].component(vector::Y);
+            		z = currPatch.Cf()[faceI].component(vector::Z);
+
+            		r.boundaryField()[patchI][faceI] = mag(ctr - vector(x, y, z));
             	}
             	Info<< "myList = " << myList << endl;
 
@@ -279,7 +288,7 @@ int main(int argc, char *argv[])
                         " " << currPatch.Cf()[myList[i]].component(vector::Z) << endl;
                 }
 
-                coor.boundaryField()[patchI]=currPatch.Cf();
+                //coor.boundaryField()[patchI]=currPatch.Cf();
 
             	/*
             	// if vect is one random point, findCell will return global label
@@ -341,9 +350,11 @@ int main(int argc, char *argv[])
                         " " << d[patchI][faceI] << endl;
                     
                 }
-                coor.write();                                                                                                                }
+
+            }
 
     }
+        r.write();
 
     }
 
