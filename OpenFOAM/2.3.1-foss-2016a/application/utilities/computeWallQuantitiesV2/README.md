@@ -1,4 +1,4 @@
-# computewallquantitiesV1
+# computewallquantitiesV2
 
 ## source
 https://bitbucket.org/lesituu/computewallquantities
@@ -19,7 +19,7 @@ Value of the coordinates will be written into `0/coor`'s subDictionary 'Port1' t
 Plain text file for the same data
 
 ## How
-computeWallQuantities -noMeanFields -time '0' 
+computeWallQuantitiesV2 -noMeanFields -time '0' 
 
 ## Limit
 variables calculated are all wall-related thus only visible at wall. When visualizing by
