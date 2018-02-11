@@ -193,44 +193,37 @@ int main(int argc, char *argv[])
                ),
                mesh,
 			   dimensionedScalar("r", dimLength, scalar(0.0))
-			   //dimensionedVector("coor", dimLength, (0.0 , 0.0 , 0.0)) // this doesn't work
          );
 
-/*
-labelListIOList listListName
-(
-IOobject
-(
-"listListName",
-runTime.time().constant(), // Assuming your dictionary is in constant/
-mesh,
-IOobject::MUST_READ,
-IOobject::NO_WRITE
-),
-listListName
-);
-*/
-/*
-	IOList<labelList> proximityCells(
-      IOobject(
-                "proximityCells",
-                runTime.time().constant(),
-                mesh,
-                IOobject::MUST_READ,
-                IOobject::NO_WRITE
-            )
-     );
+/*	
+	//This block reads a labelListList
+	//face is a list of faces and face it self is a list so polyMesh/faces is an example of
+	//labelListList
+
+	//labelListIOList proximityCells  // this gives error labelListIOList is not in this scope
+	IOList<labelList> proximityCells  // while this class is well recognized
+	(
+		IOobject
+		(
+			"proximityCells",
+			runTime.time().constant(), 
+			mesh,
+			IOobject::MUST_READ,
+			IOobject::NO_WRITE
+		)
+	);
 	Info << "size : " << proximityCells.size() << endl;
 	Info << "size : " << proximityCells[0] << endl;
 	Info << "size : " << proximityCells[1] << endl;
 */
+
 	IOList<label> myCells(
-      IOobject(
-                "myCells",
-                runTime.time().constant(),
-                mesh,
-                IOobject::MUST_READ,
-                IOobject::NO_WRITE
+    	IOobject(
+                 "myCells",
+                 runTime.time().constant(),
+                 mesh,
+                 IOobject::MUST_READ,
+                 IOobject::NO_WRITE
             )
      );
         // Get index of patch
@@ -244,9 +237,9 @@ listListName
 		const word w1("fixedWalls");
 		const word w2("frontAndBack");
 		*/
-		// call size() of mother class fvPatchList
+
 		label nb_fvPatch = mesh.boundaryMesh().size();
-		//
+
 		const label w0PatchID = mesh.boundaryMesh().findPatchID(w0);
 		const label w1PatchID = mesh.boundaryMesh().findPatchID(w1);
 		const label w2PatchID = mesh.boundaryMesh().findPatchID(w2);
@@ -267,17 +260,15 @@ listListName
 			<< w2PatchID << "\n" << endl;
 
 
-        // Grab the distance to the wall for the near-wall cells
+        // Distance to the wall for the near-wall cells
         volScalarField::GeometricBoundaryField d = nearWallDist(mesh).y();
-
-
 
         const fvPatchList& patches = mesh.boundary();
 
         fileName writePathRoot("./postProcessing/computeWallQuantities"/runTime.timeName());
         mkDir(writePathRoot);
 
-        // Go through wall-patches and compute the quantities
+        // Go through patches
         forAll(patches, patchI)
         {
             const fvPatch& currPatch = patches[patchI];
@@ -290,6 +281,8 @@ listListName
             			<< " size = " << currPatch.Cf().size() << endl;
 
         		labelList myList;
+/*
+				// This block works, well... the initialization for a list is nasty
         		labelList lst;
 				//wrong answers
 				//lst = {1, 2, 3, 4};
@@ -305,30 +298,23 @@ listListName
 				Info << "lst size : " << lst.size() << endl;
 				forAll(lst, i)
 				{
-					/* error: invalid types ‘<unresolved overloaded function type>[Foam::label {aka int}]’ for array subscript
-                       Info<< "lst : " << lst[i] << currPatch.Cf[i].component(vector::X) << endl;
-																  ^
-                    */                            
-					/* error: invalid types ‘<unresolved overloaded function type>[int]’ for array subscript
-      				   Info<< "lst : " << lst[i] << currPatch.Cf[lst[i]].component(vector::X) << endl;
-													  ^
-					*/
-					//Info<< "lst : " << lst[i] << endl;
       				Info<< "lst : " << lst[i] << " " <<  currPatch.Cf()[lst[i]].component(vector::Y) << endl;
 				}
+*/
 				forAll(myCells, i)
 				{
       				Info<< "myCells : " << myCells[i] << " " << currPatch.Cf()[myCells[i]].component(vector::Y) << endl;
 				}
         		scalar x,y,z;
         		vector ctr(0, -0.2, 0);
-        		Info << "magnitude : " << mag(ctr) << endl;
 
             	forAll(currPatch, faceI)
             	{
             		// this is for internal mesh and uses the global label list
-            		//Info << "coordinates : " << mesh.C()[faceI] << endl;
+            		// Info << "coordinates : " << mesh.C()[faceI] << endl;
+
             		// this is for boundary mesh
+					// get the labelList of cells satisfying the criteria below
             		if (currPatch.Cf()[faceI].component(vector::Z) < 0.0005
             				&&
 						currPatch.Cf()[faceI].component(vector::Z) > 0	)
@@ -336,7 +322,6 @@ listListName
                 		//Info << "coordinates : " << faceI << " " << currPatch.Cf()[faceI] << endl;
                 		myList.append(faceI);
             		}
-                	//Info << "coordinates : " << faceI << " " << currPatch.Cf()[faceI] << endl;
 
             		x = currPatch.Cf()[faceI].component(vector::X);
             		y = currPatch.Cf()[faceI].component(vector::Y);
@@ -357,8 +342,6 @@ listListName
                         " " << currPatch.Cf()[myList[i]].component(vector::Y) <<
                         " " << currPatch.Cf()[myList[i]].component(vector::Z) << endl;
                 }
-
-                //coor.boundaryField()[patchI]=currPatch.Cf();
 
             	/*
             	// if vect is one random point, findCell will return global label
