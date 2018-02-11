@@ -196,6 +196,43 @@ int main(int argc, char *argv[])
 			   //dimensionedVector("coor", dimLength, (0.0 , 0.0 , 0.0)) // this doesn't work
          );
 
+/*
+labelListIOList listListName
+(
+IOobject
+(
+"listListName",
+runTime.time().constant(), // Assuming your dictionary is in constant/
+mesh,
+IOobject::MUST_READ,
+IOobject::NO_WRITE
+),
+listListName
+);
+*/
+/*
+	IOList<labelList> proximityCells(
+      IOobject(
+                "proximityCells",
+                runTime.time().constant(),
+                mesh,
+                IOobject::MUST_READ,
+                IOobject::NO_WRITE
+            )
+     );
+	Info << "size : " << proximityCells.size() << endl;
+	Info << "size : " << proximityCells[0] << endl;
+	Info << "size : " << proximityCells[1] << endl;
+*/
+	IOList<label> myCells(
+      IOobject(
+                "myCells",
+                runTime.time().constant(),
+                mesh,
+                IOobject::MUST_READ,
+                IOobject::NO_WRITE
+            )
+     );
         // Get index of patch
 
         const word w0("inlet");
@@ -249,6 +286,8 @@ int main(int argc, char *argv[])
             {
             	Info << "entering patch " << w0
             			<< " size = " << currPatch.size() << endl;
+            	Info << "entering patch.Cf() " << w0
+            			<< " size = " << currPatch.Cf().size() << endl;
 
         		labelList myList;
         		labelList lst;
@@ -275,6 +314,11 @@ int main(int argc, char *argv[])
 													  ^
 					*/
 					//Info<< "lst : " << lst[i] << endl;
+      				Info<< "lst : " << lst[i] << " " <<  currPatch.Cf()[lst[i]].component(vector::Y) << endl;
+				}
+				forAll(myCells, i)
+				{
+      				Info<< "myCells : " << myCells[i] << " " << currPatch.Cf()[myCells[i]].component(vector::Y) << endl;
 				}
         		scalar x,y,z;
         		vector ctr(0, -0.2, 0);
@@ -292,6 +336,7 @@ int main(int argc, char *argv[])
                 		//Info << "coordinates : " << faceI << " " << currPatch.Cf()[faceI] << endl;
                 		myList.append(faceI);
             		}
+                	//Info << "coordinates : " << faceI << " " << currPatch.Cf()[faceI] << endl;
 
             		x = currPatch.Cf()[faceI].component(vector::X);
             		y = currPatch.Cf()[faceI].component(vector::Y);
