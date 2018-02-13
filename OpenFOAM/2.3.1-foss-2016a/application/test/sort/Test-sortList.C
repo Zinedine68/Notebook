@@ -35,6 +35,7 @@ using namespace Foam;
 
 int main(int argc, char *argv[])
 {
+/*
     labelList orig(8);
     orig[0] = 7;
     orig[1] = 9;
@@ -44,13 +45,29 @@ int main(int argc, char *argv[])
     orig[5] = 7;
     orig[6] = 4;
     orig[7] = 0;
+*/
+    //scalarList orig(8);
+    List<scalar> orig(8);
+    //List<double> orig(8); // List<double> works
+    orig[0] = 7.0;
+    orig[1] = 9.0;
+    orig[2] = 1.0;
+    orig[3] = 2.1;
+    orig[4] = 4.0;
+    orig[5] = 7.0;
+    orig[6] = 4.0;
+    orig[7] = 0.0;
 
     labelList order;
 
-    labelList a(orig);
+    //labelList a(orig);
+    //scalarList a(orig);  // scalarList is not in scope however List<scalar> is
+    List<scalar> a(orig);
     sortedOrder(a, order);
 
-    SortableList<label> aReverse(a.size());
+    //SortableList<label> aReverse(a.size());
+    //aReverse = a;
+    SortableList<scalar> aReverse(a.size());
     aReverse = a;
 
     Info<< "unsorted: " << a << endl;
@@ -62,6 +79,7 @@ int main(int argc, char *argv[])
     Info<< "reverse sorted:   " << aReverse << endl;
     Info<< "reverse indices:  " << aReverse.indices() << endl;
 
+	/*
     SortableList<label> b(orig);
     Info<< "unsorted: " << orig << endl;
     Info<< "sorted:   " << b << endl;
@@ -135,6 +153,7 @@ int main(int argc, char *argv[])
 
     Info<< "sorted:   " << b << endl;
     Info<< "indices:  " << b.indices() << endl;
+	*/
 
     Info<< "\nEnd\n" << endl;
 
