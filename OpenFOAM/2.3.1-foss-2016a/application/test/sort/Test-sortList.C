@@ -28,6 +28,9 @@ Description
 #include "SortableList.H"
 #include "ListOps.H"
 
+#include "IOList.H"
+#include "fvCFD.H"
+
 using namespace Foam;
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -35,6 +38,9 @@ using namespace Foam;
 
 int main(int argc, char *argv[])
 {
+	#include "setRootCase.H"
+	#include "createTime.H"
+//	#include "createMesh.H"
 /*
     labelList orig(8);
     orig[0] = 7;
@@ -46,6 +52,49 @@ int main(int argc, char *argv[])
     orig[6] = 4;
     orig[7] = 0;
 */
+
+    IOList<label> myList
+	(
+        IOobject
+		(
+                 "myList",
+				 "",
+                 //mesh,
+                 runTime,
+                 IOobject::MUST_READ,
+                 IOobject::NO_WRITE
+		)
+     );
+	Info << "myList : " << myList << endl;
+
+	// Input file dictionary
+	IOdictionary ioDictObj
+	(
+		IOobject
+		(
+				"myDictFile",
+				"",
+				runTime,
+				IOobject::MUST_READ,
+				IOobject::NO_WRITE
+		)
+	);
+	List<label> myList1 (ioDictObj.lookup("myList1"));
+	Info << "myList1 : " << myList1 << endl;
+
+	dimensionedScalar scalar_in( ioDictObj.lookup("scalar_in") );
+	Info << "scalar_in.value() : " << scalar_in.value() << endl;
+
+	//Didn't get the scalar reading work
+	//scalar b(ioDictObj.lookup("b"));
+	//cannot convert ‘Foam::ITstream’ to ‘Foam::scalar {aka double}’ in initialization
+	//double b(ioDictObj.lookup("b"));
+	//cannot convert ‘Foam::ITstream’ to ‘double’ in initialization
+	/*
+	 *   aka : as known as
+	 */
+	//Info << "b : " << b << endl;
+
     //scalarList orig(8);
     List<scalar> orig(8);
     //List<double> orig(8); // List<double> works
