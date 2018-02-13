@@ -1,0 +1,24 @@
+FoamFile
+{
+version 2.0;
+format ascii;
+class dictionary;;
+location "";
+object myDictFile;
+}
+
+myList1
+(
+11
+12
+13
+14
+); 
+/*
+ "ill defined primitiveEntry starting at keyword 'myList1' on line 11 and ending at line 18"
+ if I don't put the ";" at the end
+*/
+
+b 199.9;
+
+scalar_in dimless [ 0 0 0 0 0 0 0 ] 200.0;
