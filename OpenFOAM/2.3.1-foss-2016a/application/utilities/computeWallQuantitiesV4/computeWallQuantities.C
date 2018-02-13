@@ -183,10 +183,6 @@ int main(int argc, char *argv[])
       				Info<< "lst : " << lst[i] << " " <<  currPatch.Cf()[lst[i]].component(vector::Y) << endl;
 				}
 */
-				forAll(myCells, i)
-				{
-      				Info<< "myCells : " << myCells[i] << " " << currPatch.Cf()[myCells[i]].component(vector::X) << endl;
-				}
         		scalar x,y,z;
         		vector ctr(0, -0.2, 0);
 
@@ -211,15 +207,16 @@ int main(int argc, char *argv[])
 
             		r.boundaryField()[patchI][faceI] = mag(ctr - vector(x, y, z));
             	}
-            	Info<< "myList = " << myList << endl;
+            	//Info<< "myList = " << myList << endl;
 
             	mkDir(writePathRoot/currPatch.name());
-                OFstream yCoorFile(
-                        fileName(writePathRoot/currPatch.name()/"yCoor"));
+                //OFstream yCoorFile(
+                //        fileName(writePathRoot/currPatch.name()/"yCoor"));
                 OFstream xCoorFile(
                         fileName(writePathRoot/currPatch.name()/"xCoor"));
 
 
+				/*
                 forAll(myList, i)
                 {
                 	Info << "label and coordinates :" << myList[i] << " " << currPatch.Cf()[myList[i]] << endl;
@@ -227,14 +224,30 @@ int main(int argc, char *argv[])
                         " " << currPatch.Cf()[myList[i]].component(vector::Y) <<
                         " " << currPatch.Cf()[myList[i]].component(vector::Z) << endl;
                 }
+				*/
 
-                forAll(myCells, i)
-                {
-                	Info << "label and coordinates :" << myCells[i] << " " << currPatch.Cf()[myCells[i]] << endl;
-                	xCoorFile << currPatch.Cf()[myCells[i]].component(vector::X) <<
-                        " " << currPatch.Cf()[myCells[i]].component(vector::Y) <<
-                        " " << currPatch.Cf()[myCells[i]].component(vector::Z) << endl;
-                }
+				labelList order;
+				scalarList a(myCells.size());
+				Info << "myCells : " << myCells << endl;
+				Info << "myCells xcoor : " << endl;
+
+				forAll(myCells, i)
+				{
+      				Info<< currPatch.Cf()[myCells[i]].component(vector::X) << endl;
+					//a.append(currPatch.Cf()[myCells[i]].component(vector::X));  // eventually size of a is two times the size of myCells which is not right at all !
+					a[i] = currPatch.Cf()[myCells[i]].component(vector::X);
+				}
+
+				sortedOrder(a, order);
+				sort(a);
+
+				forAll(order, i)
+				{
+					Info<< "order[" << i << "]" << order[i] << "  ordered myCells : " << myCells[order[i]] << " xcoord : " << currPatch.Cf()[myCells[order[i]]].component(vector::X)<< endl;
+                	xCoorFile << currPatch.Cf()[myCells[order[i]]].component(vector::X) <<
+                        " " << currPatch.Cf()[myCells[order[i]]].component(vector::Y) <<
+                        " " << currPatch.Cf()[myCells[order[i]]].component(vector::Z) << endl;
+				}
 
             	/*
             	// if vect is one random point, findCell will return global label
@@ -244,7 +257,8 @@ int main(int argc, char *argv[])
         		*/
         		//Info << "point label : " << currPatch.findCell(vect) << endl;  // doesn't work
             }
-    	}
+
+		}
         r.write();
 
     }

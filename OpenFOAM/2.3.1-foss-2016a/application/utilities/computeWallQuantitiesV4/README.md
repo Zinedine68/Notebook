@@ -4,8 +4,7 @@
 https://bitbucket.org/lesituu/computewallquantities
 
 ## Functionality
-Comparing to V3, clean out the wall part. Towards a clean utility only for meshes.
-Using paraview to get a local labelList of cells on a patch and copy the list into a dictionary (file in constant dir) then read by utility and proceed.
+Remind this version still read a dictionary from myCells, however the sorting is tested thanks to Test-sortList which should just works fine.
 
 ## Developpment Approacheseses
 1. "findCell" works with variable "mesh" not a patch, meaning it returns a global label for
@@ -27,7 +26,7 @@ If we can improve approach 2 and find neighbor cellID using a direction vector (
 ## How
 paraview export a labelList
 copy the labelList to the specific file
-computeWallQuantitiesV3 -noMeanFields -time '0' 
+computeWallQuantitiesV4 -noMeanFields -time '0' 
 
 ## Limit
 
@@ -35,6 +34,11 @@ computeWallQuantitiesV3 -noMeanFields -time '0'
 
 ## Dig the mine of OpenFOAM
 ```cpp
+//Initialization of a labelList
+	scalarList a(myCells.size());
+	a.append(); // this actually appends from a[myCells.size()] meaning ends up with a List a with a bigger size than myCells
+
+
 //Initialization of a volVectorField
 
         volVectorField coor
