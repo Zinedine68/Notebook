@@ -22,14 +22,14 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Application
-    Lambda2
+    Modified from Lambda2
 
 Description
-    Calculates and writes the second largest eigenvalue of the sum of the
-    square of the symmetrical and anti-symmetrical parts of the velocity
-    gradient tensor.
-
     The -noWrite option has no meaning.
+
+Usage
+	KineticEnergy -time '99950'
+	mpirun -n 4 KineticEnergy -time '99950' -parallel
 
 \*---------------------------------------------------------------------------*/
 
@@ -67,26 +67,24 @@ void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
         );
 
         Info<< "    Writing -Kinetic Energy : KE " << endl;
-        KE.write();
+        //KE.write();
 
 		scalar TKE = gSum(KE);
 		Info<< "    Summing up : gSum(KE) = "<< TKE << endl;
 		Info<< "    Summing up :  Sum(KE) = "<< sum(KE) << endl;
 
-		//volScalarField k = KE * mesh.V();
-		//scalar TKE1 = gSum(k);
-		//volScalarField TKE1 = sum(KE * mesh.V())/sum(mesh.V());
-		//volScalarField TKE1 = sum(KE * KE)/sum(mesh.V());
-		//Info<< "    Summing up : gSum(KE * mesh.V()) = "<< TKE1 << endl;
 		Info<< "    Summing up : weighted average of KE = "
-				<< KE.weightedAverage(mesh.V()) 
-				<< "Note that this is verified by paraview - Filter - intergate "
-				<< "which is a volumic integration. Divide the paraview calculation "
+				<<  KE.weightedAverage(mesh.V())  << nl
+				/*
+				<< "WeightedAverage : here the weight is cellVolume/TotalVolume" << nl
+				<< "Note that this is verified by paraview - Filter - intergate " << nl
+				<< "which is a volumic integration. Divide the paraview calculation " << nl
 				<< "by volume, you will get the same as here" << endl;
+				*/
+				<< endl;
 
 		const scalar totalVol = gSum(mesh.V());
 		Info<< "    totalVol              = "<< totalVol << endl;
-		//Info<< "    totalVol              = "<< one.weightedAverage(mesh.V()) << endl;
     }
     else
     {
