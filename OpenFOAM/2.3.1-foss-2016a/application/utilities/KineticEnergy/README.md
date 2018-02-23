@@ -1,7 +1,8 @@
 # KineticEnergy
 
 ## source
-add write data in appending mode using std::ofstream instead of FOAM::OFstream
+last version's bug : have a 'l' at every timeStep Name.   
+fix it by putting the std:: before almost everything used in stdc++ except the 'c_str()'
 
 ## Functionality
 Read U and calculate the sqr(U) volScalarField then a volume average (scalar).

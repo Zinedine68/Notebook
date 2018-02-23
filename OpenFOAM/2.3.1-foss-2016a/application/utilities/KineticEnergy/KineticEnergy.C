@@ -35,10 +35,20 @@ Usage
 
 #include "calc.H"
 #include "fvc.H"
-#include "OFstream.H"
+
+//#include "OFstream.H" // Actually this is more than needed : ofstream
+#include <fstream>
+using std::ofstream;
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+/*
+ *  Here remind you that you are in the namespace Foam by 
+ *
+ *  Foam::calc(... ... ...)
+ *
+ *  Evidence : in calc.H function calc is { } by namespace Foam
+ */
 void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
 {
     IOobject Uheader
@@ -89,9 +99,16 @@ void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
 
 		fileName writePathRoot("./");
     	mkDir(writePathRoot/"fieldStatistics");
-    	//OFstream KineticEnergy(fileName(writePathRoot/"fieldStatistics"/"KineticEnergy"));
+    	//OFstream KineticEnergy(fileName(writePathRoot/"fieldStatistics"/"KineticEnergy"),ios_base::app);  // ios_base::app not found
 		ofstream KineticEnergy(fileName(writePathRoot/"fieldStatistics"/"KineticEnergy").c_str(), ios_base::app);
-    	KineticEnergy << runTime.timeName() << " " << waKE << nl << endl;
+		if (Pstream::master())
+		{
+			//std::cout << runTime.timeName().c_str() << " " << waKE << "\n" << std::endl;
+    		KineticEnergy << runTime.timeName().c_str() << " " << waKE << std::endl; // This is the right and safest way to do
+
+    		//KineticEnergy << runTime.timeName().c_str() << " " << waKE << endl;  // same as Foam::endl : no error in compilation but "endl" will not work as expected.
+    		//KineticEnergy << runTime.timeName().c_str() << " " << waKE << Foam::endl;  
+		}
     }
     else
     {
