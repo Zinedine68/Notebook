@@ -1,7 +1,7 @@
 # KineticEnergy
 
 ## source
-Clean version
+add write data in appending mode using std::ofstream instead of FOAM::OFstream
 
 ## Functionality
 Read U and calculate the sqr(U) volScalarField then a volume average (scalar).
@@ -24,3 +24,6 @@ Never manage to use "sum" or "gsum" and "mesh.V()" to calculate the KE.weightedA
 Unary operator like "sum" and "gsum" seems to only accept a variable not two variable with a operation
 from which the result is only one variable. Ex : sum(1.0 * KE) will not work. No deduction in this
 macro-like functions ?
+
+# Dig the mine of OpenFOAM
+

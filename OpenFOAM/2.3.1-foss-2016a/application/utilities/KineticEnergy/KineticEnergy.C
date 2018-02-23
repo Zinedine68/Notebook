@@ -35,6 +35,7 @@ Usage
 
 #include "calc.H"
 #include "fvc.H"
+#include "OFstream.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -69,12 +70,12 @@ void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
         Info<< "    Writing -Kinetic Energy : KE " << endl;
         //KE.write();
 
-		scalar TKE = gSum(KE);
-		Info<< "    Summing up : gSum(KE) = "<< TKE << endl;
+		Info<< "    Summing up : gSum(KE) = "<< gSum(KE) << endl;
 		Info<< "    Summing up :  Sum(KE) = "<< sum(KE) << endl;
 
+		scalar waKE = KE.weightedAverage(mesh.V()).value();
 		Info<< "    Summing up : weighted average of KE = "
-				<<  KE.weightedAverage(mesh.V())  << nl
+				<<  waKE  << nl
 				/*
 				<< "WeightedAverage : here the weight is cellVolume/TotalVolume" << nl
 				<< "Note that this is verified by paraview - Filter - intergate " << nl
@@ -85,11 +86,19 @@ void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
 
 		const scalar totalVol = gSum(mesh.V());
 		Info<< "    totalVol              = "<< totalVol << endl;
+
+		fileName writePathRoot("./");
+    	mkDir(writePathRoot/"fieldStatistics");
+    	//OFstream KineticEnergy(fileName(writePathRoot/"fieldStatistics"/"KineticEnergy"));
+		ofstream KineticEnergy(fileName(writePathRoot/"fieldStatistics"/"KineticEnergy").c_str(), ios_base::app);
+    	KineticEnergy << runTime.timeName() << " " << waKE << nl << endl;
     }
     else
     {
         Info<< "    No U" << endl;
     }
+
+	Info<< "Using appending mode in writting data, be sure that the old data is erased !" << endl;
 
     Info<< "\nEnd\n" << endl;
 }
