@@ -27,4 +27,4 @@ from which the result is only one variable. Ex : sum(1.0 * KE) will not work. No
 macro-like functions ?
 
 # Dig the mine of OpenFOAM
-
+Another solution is to add "append" option to the OpenFOAM encapsulation of class OFstream by hjasak. Link here : [solution hjasak](https://www.cfd-online.com/Forums/openfoam-solving/58347-how-open-old-file-append.html)
