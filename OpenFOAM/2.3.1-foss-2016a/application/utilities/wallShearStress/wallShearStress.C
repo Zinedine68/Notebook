@@ -153,11 +153,11 @@ int main(int argc, char *argv[])
         Info<< "Time = " << runTime.timeName() << endl;
         mesh.readUpdate();
 
-        volVectorField wallShearStress
+        volVectorField meanWallShearStress
         (
             IOobject
             (
-                "wallShearStress",
+                "meanWallShearStress",
                 runTime.timeName(),
                 mesh,
                 IOobject::NO_READ,
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
             mesh,
             dimensionedVector
             (
-                "wallShearStress",
+                "meanWallShearStress",
                 sqr(dimLength)/sqr(dimTime),
                 vector::zero
             )
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 
         IOobject UHeader
         (
-            "U",
+            "UMean",
             runTime.timeName(),
             mesh,
             IOobject::MUST_READ,
@@ -183,27 +183,27 @@ int main(int argc, char *argv[])
 
         if (UHeader.headerOk())
         {
-            Info<< "Reading field U\n" << endl;
+            Info<< "Reading field UMean\n" << endl;
             volVectorField U(UHeader, mesh);
 
             if (compressible)
             {
-                calcCompressible(mesh, runTime, U, wallShearStress);
+                calcCompressible(mesh, runTime, U, meanWallShearStress);
             }
             else
             {
-                calcIncompressible(mesh, runTime, U, wallShearStress);
+                calcIncompressible(mesh, runTime, U, meanWallShearStress);
             }
         }
         else
         {
-            Info<< "    no U field" << endl;
+            Info<< "    no UMean field" << endl;
         }
 
-        Info<< "Writing wall shear stress to field " << wallShearStress.name()
+        Info<< "Writing mean wall shear stress to field " << meanWallShearStress.name()
             << nl << endl;
 
-        wallShearStress.write();
+        meanWallShearStress.write();
     }
 
     Info<< "End" << endl;

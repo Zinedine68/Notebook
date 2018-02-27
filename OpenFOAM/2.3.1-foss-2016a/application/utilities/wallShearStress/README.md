@@ -1,22 +1,21 @@
-# wallShearStress
+# meanWallShearStress
 
 ## source
-OF-2.3 official version
+modified from OF-2.3 official version
 
 ## Functionality
-Calculate the stress/force on the wall, which contains not only a shear component but also a normal component.
-```latex
-T = \tau \cdot n
-```
+Calculate the "mean" stress/force on the wall, which contains not only a shear component but also a normal component.
+T = tau . n
 
 ## Input
-U
+UMean
 
 ## Output
-vector wallShearStress on wall
+vector meanWallShearStress on wall
 
 ## How
-wallShearStress (by defaut incompressible so everything is divided by rho already meaning uTau=sqrt(wallShearComponent)). However running in OF-2.3 needs a RASProperties where in a laminar case specifying `RASModel	laminar`
+meanWallShearStress (by defaut incompressible so everything is divided by rho already meaning uTau=sqrt(wallShearComponent)). However running in OF-2.3 needs a RASProperties where in a laminar case specifying `RASModel	laminar`   
+Maybe possible in parallel run also : to be tested
 
 ## Limit
 
