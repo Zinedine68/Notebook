@@ -11,6 +11,12 @@ int main()
         << vector::rank << endl;
 
     vector d(0.5, 0.5, 0.5);
+	Info<< "d = " << d << endl;
+	//Info<< "d^2 = " << sqr(d) << endl;
+	d.replace(vector::X, pow(d.component(vector::X), 2));
+	d.replace(vector::Y, pow(d.component(vector::Y), 2));
+    d.replace(vector::Z, pow(d.component(vector::Z), 2));
+	Info<< "d^2 = " << d << endl;
     d /= mag(d);
 
     vector dSmall = (1e-100)*d;
