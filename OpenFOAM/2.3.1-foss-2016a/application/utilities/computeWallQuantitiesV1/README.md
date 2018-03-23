@@ -19,7 +19,7 @@ if `wallModel` modify nuEff, if not nuEff has the same value as nu
 uTau.boundaryField()[patchI]=
      sqrt(                                             // sqrt (
           nuEff.boundaryField()[patchI]                // 	nu
-         *mag(UMean.boundaryField()[patchI].snGrad())  // 	* mag(d UMean/ dy)
+         *mag(UMean.boundaryField()[patchI].snGrad())  // 	* mag(surface normal gradient of UMean)
      );                                                // )
 ```
 
