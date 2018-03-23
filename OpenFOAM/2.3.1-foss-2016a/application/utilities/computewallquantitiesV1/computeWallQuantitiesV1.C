@@ -275,6 +275,15 @@ int main(int argc, char *argv[])
 				//pMean.write();
 				//d.write();    // this cannot write
 				dist.write();   
+
+				Info << "nu = " << nu << endl;
+				Info << "nuLam = " << nuLam << endl;
+				Info << "uTau max/min : "
+						//<< max(uTau).value() << " "
+						//<< min(uTau).value() << endl;
+						<< max(uTau.boundaryField()) << " "
+						<< min(uTau.boundaryField()) << endl;//" "
+						//<< mean(uTau.boundaryField()) << endl;
 		                                                                                                                       }
 		 }
 
