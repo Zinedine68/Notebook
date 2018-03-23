@@ -202,6 +202,20 @@ int main(int argc, char *argv[])
 
         Info<< "Writing mean wall shear stress to field " << meanWallShearStress.name()
             << nl << endl;
+        Info<< "meanWallShearStress max/min : " 
+				// mag
+				//<< max(mag(meanWallShearStress)).value() << " "
+				//<< min(mag(meanWallShearStress)).value() << endl;
+				// boundaryField
+				//<< max(mag(meanWallShearStress.boundaryField())) << " "
+				//<< min(mag(meanWallShearStress.boundaryField())) << endl;
+				// boundaryField component z
+				<< max(mag(meanWallShearStress.boundaryField().component(vector::Z))) << " "
+				<< min(mag(meanWallShearStress.boundaryField().component(vector::Z))) << endl;
+        Info<< "uTau max/min mag(meanWallShearStress component Z): " 
+				<< Foam::sqrt(max(mag(meanWallShearStress.boundaryField().component(vector::Z)))) << " "
+				<< Foam::sqrt(min(mag(meanWallShearStress.boundaryField().component(vector::Z)))) << endl; // need this Foam::
+
 
         meanWallShearStress.write();
     }
