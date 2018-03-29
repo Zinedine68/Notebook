@@ -26,7 +26,9 @@ r
 U1
 
 ## How
-setFluctuation0 -time '5'
+setFluctuation0 -time '5'   
+[Note: directory '5' must exist. No files inside are required.
+ Otherwise timeDirs will be "1(1    1)" and never will directory '5' is gonna be created on its own.]
 
 ## Limit
 
