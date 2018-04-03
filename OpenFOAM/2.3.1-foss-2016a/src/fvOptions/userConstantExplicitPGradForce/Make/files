@@ -1,0 +1,11 @@
+/*fvOptions/fvOption.C
+fvOptions/fvOptionIO.C
+fvOptions/fvOptionList.C
+fvOptions/fvIOoptionList.C*/
+
+
+userConstantExplicitPGradForce.C
+userConstantExplicitPGradForceIO.C
+
+
+LIB = $(FOAM_USER_LIBBIN)/libfvOptionUserConstantExplicitPGradForce
