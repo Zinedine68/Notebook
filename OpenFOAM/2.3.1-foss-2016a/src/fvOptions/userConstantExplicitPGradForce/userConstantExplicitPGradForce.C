@@ -87,12 +87,18 @@ Foam::fv::userConstantExplicitPGradForce::userConstantExplicitPGradForce
 :
     option(sourceName, modelType, dict, mesh),
     Ubar_(coeffs_.lookup("Ubar")),
-    gradP0_(0.0),
+    gradP0_(readScalar(coeffs_.lookup("gradP0"))),
     dGradP_(0.0),
     flowDir_(Ubar_/mag(Ubar_)),
     invAPtr_(NULL)
 {
-    coeffs_.lookup("fieldNames") >> fieldNames_;
+	coeffs_.lookup("fieldNames") >> fieldNames_;
+
+	Info << "#####################" << endl;
+	Info << "Inside constructor : " << endl;
+	Info << "Ubar = " << Ubar_ << endl;
+	Info << "gradP0 = " << gradP0_ << endl;
+	Info << "#####################" << endl;
 
     if (fieldNames_.size() != 1)
     {
@@ -157,14 +163,16 @@ void Foam::fv::userConstantExplicitPGradForce::correct(volVectorField& U)
 
     // Calculate the pressure gradient increment needed to adjust the average
     // flow-rate to the desired value
-    dGradP_ = (mag(Ubar_) - magUbarAve)/rAUave;
+    dGradP_ = 0;
 
     // Apply correction to velocity field
+	/*
     forAll(cells_, i)
     {
         label cellI = cells_[i];
         U[cellI] += flowDir_*rAU[cellI]*dGradP_;
     }
+	*/
 
     scalar gradP = gradP0_ + dGradP_;
 
