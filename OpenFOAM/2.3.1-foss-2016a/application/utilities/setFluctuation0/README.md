@@ -31,6 +31,7 @@ setFluctuation0 -time '5'
  Otherwise timeDirs will be "1(1    1)" and never will directory '5' is gonna be created on its own.]
 
 ## Limit
+type of wall patch is changed after running the utility to "calculated" need to modify it back to "fixedValue" for imposing the right no-slip condition
 
 # Cope with limit
 
