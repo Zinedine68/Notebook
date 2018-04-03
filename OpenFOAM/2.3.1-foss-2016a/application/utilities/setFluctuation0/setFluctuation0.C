@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 #   include "createMesh.H"
 #   include "readTransportProperties.H"
 
-
+	Info << "timeDirs" << timeDirs << endl;
     // For each time step read all fields
     forAll(timeDirs, timeI)
     {
@@ -154,18 +154,18 @@ int main(int argc, char *argv[])
 			   dimensionedScalar("r", dimLength, scalar(0.0))
          );
 
-        volVectorField U1
+        volVectorField U
         (
            IOobject
            (
-               "U1",
+               "U",
                runTime.timeName(),
                mesh,
                IOobject::NO_READ,
                IOobject::AUTO_WRITE
                ),
                mesh,
-			   dimensionedVector("U1", dimLength/dimTime, vector(0, 0, 0))
+			   dimensionedVector("U", dimLength/dimTime, vector(0, 0, 0))
          );
 /*	
 	//This block reads a labelListList
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
 		//Info << "r_in = " << r_in << endl;
 		//Info << "r = " << r << endl;
 		scalar R(0.004);
-		scalar uTau(0.045);
+		scalar uTau(0.0469);
 		//scalarField yPlus = R - r.internalField();
 		scalarField yPlus = (R - r.internalField()) * uTau / 1.0e-6;
 
@@ -269,33 +269,33 @@ int main(int argc, char *argv[])
 		scalarField envelope_Rz = Foam::sqrt(3.0) * uTau * envelopeUzRMS(yPlus); // Foam::envelope... ????
 		scalarField envelope_Rr = Foam::sqrt(3.0) * uTau * envelopeUrRMS(yPlus);
 
-		vector n_ (0, 0, 0);
+		vector n_ (0, 0, 1);
 		Info << "this is the non-mean flow version !! n_ = " << n_ << endl;
-		vectorField& internalU = U1.internalField();
+		vectorField& internalU = U.internalField();
 		//Random ranGen_(label(this->db().time().timeIndex()));
 		Random ranGen_(label(runTime.time().timeIndex()));
-		vectorField randomField(U1.internalField().size());
-		vectorField envelopeField(U1.internalField().size());
+		vectorField randomField(U.internalField().size());
+		vectorField envelopeField(U.internalField().size());
 		//Info << "runTime.time() : " << runTime.time() << endl;
 		Info << "runTime.time().timeIndex() : " << runTime.time().timeIndex() << endl;
-		forAll(U1.mesh().C(),celli)
+		forAll(U.mesh().C(),celli)
 		{
-			//internalU[celli] = vector(0, 0, 20); // assignment failed. no write on U1
-			///U1.internalField()[celli] = vector(0, 0, 20); // assignment succeed. write uniform internalField on U1
-			//U1.internalField()[celli] = vector(0, 0, 20); // assignment succeed. write uniform internalField on U1
+			//internalU[celli] = vector(0, 0, 20); // assignment failed. no write on U
+			///U.internalField()[celli] = vector(0, 0, 20); // assignment succeed. write uniform internalField on U
+			//U.internalField()[celli] = vector(0, 0, 20); // assignment succeed. write uniform internalField on U
 
 			if (yPlus[celli] < 5)
 			{
 				//Info << "yPlus = " << yPlus[facei] << endl;
-				U1.internalField()[celli] = n_ * uTau * viscousLayer(yPlus[celli]);
+				U.internalField()[celli] = n_ * uTau * viscousLayer(yPlus[celli]);
 			}
 			else if ( 5 <= yPlus[celli] && yPlus[celli] < 30)
 			{
-				U1.internalField()[celli] = n_ * uTau * bufferLayer(yPlus[celli]);
+				U.internalField()[celli] = n_ * uTau * bufferLayer(yPlus[celli]);
 			}
 			else if (yPlus[celli] >= 30) // no upper limit here, there should be one
 			{
-				U1.internalField()[celli] = n_ * uTau * logLayer(yPlus[celli]);
+				U.internalField()[celli] = n_ * uTau * logLayer(yPlus[celli]);
 			}
 			else
 			{
@@ -316,8 +316,8 @@ int main(int argc, char *argv[])
 
 		randomField = 2*(randomField - 0.5*pTraits<vector>::one);
 
-		U1.internalField() =
-				U1.internalField()
+		U.internalField() =
+				U.internalField()
 			+	cmptMultiply
 				(
 				 	envelopeField,
@@ -437,7 +437,7 @@ int main(int argc, char *argv[])
 
 		}
         r.write();
-        U1.write();
+        U.write();
 
     }
     Info<< "\nEnd\n" << endl;
