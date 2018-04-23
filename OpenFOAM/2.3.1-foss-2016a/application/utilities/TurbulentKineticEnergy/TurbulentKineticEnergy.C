@@ -52,12 +52,45 @@ using std::ofstream;
 void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
 {
 	const word finalTimeStep("0.4");
-    IOobject Uheader
+    IOobject UheaderMean
     (
-        "U",
+        "U_mean",
         //runTime.timeName(),
 		//word('0.5'),
 		finalTimeStep,
+        mesh,
+        IOobject::MUST_READ
+    );
+
+    if (UheaderMean.headerOk())
+    {
+        Info<< "    Reading U_mean" << " @ time step : " << finalTimeStep<< endl;
+        volVectorField UMean(UheaderMean, mesh);
+
+        volScalarField KEMean
+        (
+            IOobject
+            (
+                "KEMean",
+                runTime.timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+			0.5 * UMean & UMean
+        );
+
+		Info<< "    Summing up : gSum(KEMean) = "<< gSum(KEMean) << endl;
+		Info<< "    Summing up :  Sum(KEMean) = "<<  sum(KEMean) << endl;
+    }
+    else
+    {
+    	Info<< "	no U_mean @ time step " << finalTimeStep << endl;
+    }
+    IOobject Uheader
+    (
+        "U",
+        runTime.timeName(),
         mesh,
         IOobject::MUST_READ
     );
