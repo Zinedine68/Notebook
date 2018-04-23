@@ -20,7 +20,7 @@ TurbulentKineticEnergy -time '0:0.4'
 
 ## Limit
 time step '0.4' is hard coded   
-if time '0' is included and initial field is uniformly zero, initial turbulent intensity is then `100%`.   
+if time '0' is included and initial field is uniformly zero, initial turbulent intensity is then `-100%`.   
 for every time step there is a output for KEMean which is extra.
 
 # Cope with limit
