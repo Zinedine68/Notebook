@@ -18,6 +18,10 @@ turbulent intensity
 pre-calculate for U_mean @ time '0.4'
 TurbulentKineticEnergy -time '0:0.4'
 
+## Improvement
+change the output directory name to 'TurbulentKineticEnergy'   
+add output TurbulentIntensity.
+
 ## Limit
 time step '0.4' is hard coded   
 if time '0' is included and initial field is uniformly zero, initial turbulent intensity is then `-100%`.   
