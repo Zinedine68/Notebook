@@ -51,10 +51,10 @@ using std::ofstream;
  */
 void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
 {
-	const word finalTimeStep("0.4");
+	const word finalTimeStep("150.4");
     IOobject UheaderMean
     (
-        "U_mean",
+        "UMean",
         //runTime.timeName(),
 		//word('0.5'),
 		finalTimeStep,
@@ -111,6 +111,19 @@ void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
 				0.5 * U & U
 			);
 
+			volScalarField tKE
+			(
+				IOobject
+				(
+					"tKE",
+					runTime.timeName(),
+					mesh,
+					IOobject::NO_READ,
+					IOobject::NO_WRITE
+				),
+				0.5 * (U - UMean) & (U - UMean)
+			);
+
 			Info<< "runTime.timeName() : "<< runTime.timeName()
 					<< endl;
 
@@ -121,7 +134,14 @@ void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
 			Info<< "    Summing up :  Sum(TTKE) = "<< sum(KE)-sum(KEMean) << endl;
 			Info<< "    Turbulent intensity = "<< (gSum(KE)-gSum(KEMean))/gSum(KEMean)*100 << "%" << endl;
 			Info<< "    Turbulent intensity = "<< (sum(KE)-sum(KEMean))/sum(KEMean)*100 << "%" << endl;
+
+			Info<< "    Summing up : gSum(tKE) = "<< gSum(tKE) << endl;
+			Info<< "    Summing up :  Sum(tKE) = "<< sum(tKE) << endl;
+			Info<< "    Turbulent intensity = "<< gSum(tKE)/gSum(KEMean)*100 << "%" << endl;
+			Info<< "    Turbulent intensity = "<< sum(tKE)/sum(KEMean)*100 << "%" << endl;
+
 			scalar turbulentIntensity = ((sum(KE)-sum(KEMean))/sum(KEMean)*100).value();
+			scalar turbulentIntensity1 = (sum(tKE)/sum(KEMean)*100).value();
 			scalar waKE = KE.weightedAverage(mesh.V()).value();
 			Info<< "    Summing up : weighted average of KE = "
 					<<  waKE  << nl
@@ -139,13 +159,15 @@ void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
 			fileName writePathRoot("./");
 			mkDir(writePathRoot/"fieldStatistics");
 			//OFstream KineticEnergy(fileName(writePathRoot/"fieldStatistics"/"KineticEnergy"),ios_base::app);  // ios_base::app not found
-			ofstream KineticEnergy(fileName(writePathRoot/"fieldStatistics"/"TurbulentKineticEnergy").c_str(), ios_base::app);
+			ofstream KineticEnergy(fileName(writePathRoot/"fieldStatistics"/"TurbulentKineticEnergy1").c_str(), ios_base::app);
 			if (Pstream::master())
 			{
 				//std::cout << runTime.timeName().c_str() << " " << waKE << "\n" << std::endl;
 				KineticEnergy << runTime.timeName().c_str() 
 						<< " " << waKE 
-						<< " " << turbulentIntensity << std::endl; // This is the right and safest way to do
+						<< " " << turbulentIntensity
+						<< " " << turbulentIntensity1
+						<< std::endl; // This is the right and safest way to do
 
 				//KineticEnergy << runTime.timeName().c_str() << " " << waKE << endl;  // same as Foam::endl : no error in compilation but "endl" will not work as expected.
 				//KineticEnergy << runTime.timeName().c_str() << " " << waKE << Foam::endl;
