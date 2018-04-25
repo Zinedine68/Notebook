@@ -40,3 +40,10 @@ paraview, need to choose only "wall" to get to display these quantities in the r
 # Cope with limit
 cannot write a boundaryField (in code d.write() does not work as expected). Don't know how
 to cope with the limit.
+
+# Dig the mine of OpenFOAM
+function `abs` doesn't work with a field. But `mag` does as well as `cmptMag`   
+
+What is then `snGrad()`?   
+if input is vectorField result is a vectorField, if input is scalarField result will be also a scalarField.
+It is actually a gradient more precisely a `surface normal gradient`.

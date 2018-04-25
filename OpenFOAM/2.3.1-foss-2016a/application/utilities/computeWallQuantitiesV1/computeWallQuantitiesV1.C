@@ -184,6 +184,34 @@ int main(int argc, char *argv[])
             dimensionedScalar("uTau", UMean.dimensions(), 0.0)
         );
 
+        volScalarField uTau1
+        (
+            IOobject
+            (
+                "uTau1",
+                runTime.timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::AUTO_WRITE
+            ),
+            mesh,
+            dimensionedScalar("uTau1", UMean.dimensions(), 0.0)
+        );
+
+        volVectorField uTau2
+        (
+            IOobject
+            (
+                "uTau2",
+                runTime.timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::AUTO_WRITE
+            ),
+            mesh,
+            dimensionedVector("uTau2", UMean.dimensions(), vector(0, 0, 0))
+        );
+
         volScalarField dist
         (
            IOobject
@@ -226,6 +254,21 @@ int main(int argc, char *argv[])
 		                *mag(UMean.boundaryField()[patchI].snGrad())
 		                );
 
+		        uTau2.boundaryField()[patchI] = 
+		        /*    sqrt(
+		                 nuEff.boundaryField()[patchI]
+		                *(UMean.boundaryField()[patchI].snGrad())
+		                );
+				*/
+		                 nuEff.boundaryField()[patchI]
+		                *(UMean.boundaryField()[patchI].snGrad());
+
+				uTau1.boundaryField()[patchI] = sqrt(
+								cmptMag(
+										uTau2.boundaryField()[patchI].component(vector::Z)
+										)
+								);
+
 		        yPlus.boundaryField()[patchI] = d[patchI]*
 		            uTau.boundaryField()[patchI]/nuLam[patchI];
 
@@ -238,6 +281,11 @@ int main(int argc, char *argv[])
                 OFstream uTauFile(
                         fileName(writePathRoot/currPatch.name()/"uTau"));
 
+                OFstream uTauFile1(
+                        fileName(writePathRoot/currPatch.name()/"uTau1"));
+
+                OFstream uTauFile2(
+                        fileName(writePathRoot/currPatch.name()/"uTau2"));
 				/*
                 OFstream pMeanFile(
                         fileName(writePathRoot/currPatch.name()/"pMean"));
@@ -257,6 +305,18 @@ int main(int argc, char *argv[])
 		                " " << currPatch.Cf()[faceI].component(vector::Y) <<
                         " " << currPatch.Cf()[faceI].component(vector::Z) <<
 		                " " << uTau.boundaryField()[patchI][faceI] << endl;
+
+		            uTauFile1 << currPatch.Cf()[faceI].component(vector::X) <<
+		                " " << currPatch.Cf()[faceI].component(vector::Y) <<
+                        " " << currPatch.Cf()[faceI].component(vector::Z) <<
+		                " " << uTau1.boundaryField()[patchI][faceI] << endl;
+
+		            uTauFile2 << currPatch.Cf()[faceI].component(vector::X) <<
+		                " " << currPatch.Cf()[faceI].component(vector::Y) <<
+                        " " << currPatch.Cf()[faceI].component(vector::Z) <<
+		                " " << uTau2.boundaryField()[patchI][faceI].component(vector::X) <<
+		                " " << uTau2.boundaryField()[patchI][faceI].component(vector::Y) <<
+		                " " << uTau2.boundaryField()[patchI][faceI].component(vector::Z) << endl;
 /*
 		            pMeanFile << currPatch.Cf()[faceI].component(vector::X) <<
 		                " " << currPatch.Cf()[faceI].component(vector::Y) <<
