@@ -1,4 +1,4 @@
-# convertTocylindrical
+# convertToCylindrical
 
 ## source
 
@@ -14,8 +14,8 @@ Ucyl
 UMeanCyl
 
 ## How
-convertTocylindrical -time '150.4' -fields '(U)'   
-convertTocylindrical -time '150.4' -fields '(UMean)'
+convertToCylindrical -time '150.4' -fields '(U)'   
+convertToCylindrical -time '150.4' -fields '(UMean)'
 
 ## limit
 The model must be oriented with the x-y plan at the r-theta plane and the z-axis must be the center axis of rotation. If not check `Usage` of the code.
