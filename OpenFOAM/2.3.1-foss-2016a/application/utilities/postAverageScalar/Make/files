@@ -1,3 +1,0 @@
-postAverageScalar.C
-
-EXE = $(FOAM_USER_APPBIN)/postAverageScalar
