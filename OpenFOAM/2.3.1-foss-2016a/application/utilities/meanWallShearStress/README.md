@@ -10,14 +10,15 @@ Calculate wallShearStress using UMean
 meanWallStress -time '1:100'
 
 ## Limit
-meanWallShearStress may be negative
+
 
 # Cope with limit
 
 ## Note
+0. meanWallShearStress may be negative (in a component's sense)
 1. Calculate the "mean" stress/force on the wall, which contains not only a shear component but also a normal component.
 T = tau . n   
-2. by defaut incompressible so everything is divided by rho already meaning uTau=sqrt(wallShearComponent)). However running in OF-2.3 needs a RASProperties where in a laminar case specifying `RASModel laminar`
+2. By defaut incompressible so everything is divided by rho already meaning uTau=sqrt(wallShearComponent)). However running in OF-2.3 needs a RASProperties where in a laminar case specifying `RASModel laminar`
 ### UMean
 read UMean as entry stored in variable U   
 calculate meanWallShearStress by `calcIncompressible(mesh, runTime, U, meanWallShearStress);` results are put in varirable meanWallShearStress
