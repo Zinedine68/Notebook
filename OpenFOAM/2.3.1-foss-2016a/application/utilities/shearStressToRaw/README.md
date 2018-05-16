@@ -1,6 +1,6 @@
 # shearStressToRaw
 
-# Prototype
+## Prototype
 wallShearStress from standard OpenFOAM library.
 
 ## Functionality
@@ -12,4 +12,4 @@ shearStressToRaw -time '1:100'
 ## Limit
 parallel run gives a wrong result.
 
-# Cope with limit
+## Cope with limit
