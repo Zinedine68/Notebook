@@ -1,13 +1,23 @@
 # meanWallShearStress
 
-## source
-modified from OF-2.3 official version
+## Prototype
+wallShearStress from standard OpenFOAM library.
 
 ## Functionality
-Calculate the "mean" stress/force on the wall, which contains not only a shear component but also a normal component.
-T = tau . n
+Calculate wallShearStress using UMean
 
-## Line
+## How To Use
+meanWallStress -time '1:100'
+
+## Limit
+meanWallShearStress may be negative
+
+# Cope with limit
+
+## Note
+1. Calculate the "mean" stress/force on the wall, which contains not only a shear component but also a normal component.
+T = tau . n   
+2. by defaut incompressible so everything is divided by rho already meaning uTau=sqrt(wallShearComponent)). However running in OF-2.3 needs a RASProperties where in a laminar case specifying `RASModel laminar`
 ### UMean
 read UMean as entry stored in variable U   
 calculate meanWallShearStress by `calcIncompressible(mesh, runTime, U, meanWallShearStress);` results are put in varirable meanWallShearStress
@@ -42,19 +52,3 @@ calculate meanWallShearStress by `calcIncompressible(mesh, runTime, U, meanWallS
 	    );
 	}
 ```
-## Input
-UMean
-
-## Output
-vector meanWallShearStress on wall
-
-## How
-meanWallShearStress (by defaut incompressible so everything is divided by rho already meaning uTau=sqrt(wallShearComponent)). However running in OF-2.3 needs a RASProperties where in a laminar case specifying `RASModel	laminar`   
-Maybe possible in parallel run also : to be tested
-
-## Limit
-meanWallShearStress may be negative
-
-# Cope with limit
-
-# Dig the mine of OpenFOAM
