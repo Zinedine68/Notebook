@@ -155,11 +155,11 @@ int main(int argc, char *argv[])
         Info<< "Time = " << runTime.timeName() << endl;
         mesh.readUpdate();
 
-        volVectorField meanWallShearStress
+        volVectorField wallShearStress
         (
             IOobject
             (
-                "meanWallShearStress",
+                "wallShearStress",
                 runTime.timeName(),
                 mesh,
                 IOobject::NO_READ,
@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
             mesh,
             dimensionedVector
             (
-                "meanWallShearStress",
+                "wallShearStress",
                 sqr(dimLength)/sqr(dimTime),
                 vector::zero
             )
@@ -190,11 +190,11 @@ int main(int argc, char *argv[])
 
             if (compressible)
             {
-                calcCompressible(mesh, runTime, U, meanWallShearStress);
+                calcCompressible(mesh, runTime, U, wallShearStress);
             }
             else
             {
-                calcIncompressible(mesh, runTime, U, meanWallShearStress);
+                calcIncompressible(mesh, runTime, U, wallShearStress);
             }
         }
         else
@@ -224,15 +224,15 @@ int main(int argc, char *argv[])
 					tauFile << currPatch.Cf()[faceI].component(vector::X)
 						<< " " << currPatch.Cf()[faceI].component(vector::Y)
 						<< " " << currPatch.Cf()[faceI].component(vector::Z)
-						<< " " << meanWallShearStress.boundaryField()[patchI][faceI].component(vector::X)
-						<< " " << meanWallShearStress.boundaryField()[patchI][faceI].component(vector::Y)
-						<< " " << meanWallShearStress.boundaryField()[patchI][faceI].component(vector::Z)
+						<< " " << wallShearStress.boundaryField()[patchI][faceI].component(vector::X)
+						<< " " << wallShearStress.boundaryField()[patchI][faceI].component(vector::Y)
+						<< " " << wallShearStress.boundaryField()[patchI][faceI].component(vector::Z)
 						<< endl;
 				}
 			}
 		}
 
-        //meanWallShearStress.write();
+        //wallShearStress.write();
     }
 
     Info<< "End" << endl;
