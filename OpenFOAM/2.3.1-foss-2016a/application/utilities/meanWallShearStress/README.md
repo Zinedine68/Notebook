@@ -4,10 +4,10 @@
 wallShearStress from standard OpenFOAM library.
 
 ## Functionality
-Calculate wallShearStress using UMean
+Calculate meanWallShearStress using UMean
 
 ## How To Use
-meanWallStress -time 'timeStepWhereStoresUMean'
+meanWallShearStress -time 'timeStepWhereStoresUMean'
 
 ## Limit
 
