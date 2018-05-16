@@ -12,7 +12,7 @@ meanWallStress -time '1:100'
 ## Limit
 
 
-# Cope with limit
+## Cope with limit
 
 ## Note
 0. meanWallShearStress may be negative (in a component's sense)
