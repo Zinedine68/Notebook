@@ -185,10 +185,10 @@ int main(int argc, char *argv[])
 				IOobject::AUTO_WRITE
 			),	
 			mesh
-			/*
-			dimensionedVector
-			(
-				"cCyl",
+			/*                         // when reading an vectorField
+			dimensionedVector          // do not initialize with zeros
+			(                          // or the flag :: MUST_READ
+				"cCyl",                // is not functioning. All ends up to be zero
 				dimless,
 				vector::zero
 			)
