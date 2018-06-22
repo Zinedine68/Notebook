@@ -1,0 +1,10 @@
+FoamFile
+{
+	version 2.0;
+	format ascii;
+	class dictionary;
+	location "";
+	object myDictFile;
+}
+
+vec_in (200 100.5 95);
