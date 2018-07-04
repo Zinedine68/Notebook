@@ -47,4 +47,4 @@ other words : you need to add explicitely a fixed number of parameters parsing
 through the program and parse every time the right parameters.   
 一句话总结：要在args构造函数(class argList)之前用`argList::validArgs.append()`来完成对command-line argument list
 大小的预设，实际执行的时候argument不能多也不能少.   
-追根溯源validArgs继承自`LList`然后就追不动了，怎么也找不到`LListBase`定义所在的文件，为什么？老戏法了，就在当下的`LList.H`中该类的申明和母类`LListBase`同时完成.所以这个类型不能够一直递推到`List`.所以append方法是此类的方法——在SLList<string>类的args末尾添加一个string叫"someTime"(normal definition)，但insert就不是了，insert表示在头上添加string.
+追根溯源validArgs继承自`LList`然后就追不动了，怎么也找不到`LListBase`定义所在的文件，为什么？？总之这个类型目前来看不能够一直递推到`List`.所以append方法是此类的方法——在SLList<string>类的args末尾添加一个string叫"someTime"(normal definition)，但insert就不是了，insert表示在头上添加string.
