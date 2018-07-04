@@ -6,7 +6,7 @@ using namespace Foam;
 
 int main( int argc, char *argv[] ) {
 
-	//argList::validArgs.append("someTime");
+	argList::validArgs.append("someTime");
 	Foam::argList args(argc, argv);
 
 	dimensionedScalar inputPressure =

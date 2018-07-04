@@ -44,4 +44,6 @@ When `args` is instantiated the constructor is called. In the end of constructor
 So openfoam's main if `args` is instantiated then the number of argments will be
 checked and when it's not consistent program will throw FatalError and exit. In 
 other words : you need to add explicitely a fixed number of parameters parsing 
-through the program and parse every time the right parameters.
+through the program and parse every time the right parameters.   
+一句话总结：要在args构造函数(class argList)之前用`argList::validArgs.append()`来完成对command-line argument list
+大小的预设，实际执行的时候argument不能多也不能少.
