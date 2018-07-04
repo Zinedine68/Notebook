@@ -23,6 +23,12 @@ Left out the big include "fvCFD.H"
 ## 3_argumentInput.C
 Omit creating object `args`. 这样main函数(其实是`class argList`的函数)就不再check每次传进的参数个数
 
+## 4_argumentInput.C
+用argv的时候需要强制转换为string才能c_str()，才能转换成double
+
+## 5_argumentInput.C
+用args，因为本来是一个stringList，所以不再要求args[1]是一个string?
+
 ## Note
 OpenFOAM's main seems to be the same as cplusplus standard : `int main( int argc, char *argv[] )`
 but if you don't add `argList::validArgs.append("someTime");` to the main function it will throw
