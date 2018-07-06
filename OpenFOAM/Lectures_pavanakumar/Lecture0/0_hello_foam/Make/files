@@ -1,0 +1,4 @@
+hello_foam.cpp
+
+EXE = helloFoam
+//EXE = $(FOAM_USER_APPBIN)/helloFoam
