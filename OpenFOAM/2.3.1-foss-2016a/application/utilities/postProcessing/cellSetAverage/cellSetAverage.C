@@ -1,6 +1,9 @@
 #include "fvCFD.H"
 #include "cellSet.H"
 
+#include <fstream>
+//using std::ofstream;
+
 int main( int argc, char *argv[] ) {
 
     Info << "Hello FOAM!" << endl; 
@@ -13,57 +16,71 @@ int main( int argc, char *argv[] ) {
 	instantList timeDirs = timeSelector::select0(runTime, args);
     #include "createMesh.H"
 
+	word dirName = word("postProcessing/fieldStatistics/sets");
+	mkDir(dirName);
+	word cellSetName = word("cylTurbGenerator");
+	//Info << "dirName+cellSetName : " << dirName+cellSetName << endl;
+	std::ofstream cellSetAveFile
+	(
+	    fileName(dirName+"/"+cellSetName).c_str(),
+		std::ios_base::app
+	);
+
 	forAll(timeDirs, timeI)
 	{
-	runTime.setTime(timeDirs[timeI], timeI);
-    Foam::Info<< "Time = " << runTime.timeName() << Foam::endl;
+	    runTime.setTime(timeDirs[timeI], timeI);
+        Foam::Info<< "Time = " << runTime.timeName() << Foam::endl;
 
-	cellSet cells_
-	(
-    	IOobject
-    	(
-        	"cylTurbGenerator",
-			"constant/polyMesh/sets",
-        	mesh,// I have to stay with you, right ?! For now.
-        	IOobject::MUST_READ,
-        	IOobject::NO_WRITE
-    	)
-	);
-
-	//volField<vector> U  // this is not working
-	volVectorField U
-	(
-		IOobject
+	    cellSet cells_
 	    (
-			"U",
-		    runTime.timeName(),	
-			mesh,
-			IOobject::MUST_READ,
-			IOobject::AUTO_WRITE		
-		),	
-	mesh
-	);
+    	    IOobject
+    	    (
+        	    cellSetName,
+			    "constant/polyMesh/sets",
+        	    mesh,// I have to stay with you, right ?! For now.
+        	    IOobject::MUST_READ,
+        	    IOobject::NO_WRITE
+    	    )
+	    );
 
-	Info << "cells_ size : " << cells_.size() << endl;
-	Info << "U size : " << U.size() << endl;
+	    //volField<vector> U  // this is not working
+	    volVectorField U
+	    (
+		    IOobject
+	        (
+			    "U",
+		        runTime.timeName(),	
+			    mesh,
+			    IOobject::MUST_READ,
+			    IOobject::AUTO_WRITE		
+		    ),	
+	        mesh
+	    );
 
-	vector flowDir_ = vector(0, 0, 1);
-	scalar magUbarAve = 0.0;
-	scalar V_ = 0.0;
-	const scalarField& cv = mesh.V();
-	forAll(cells_, i)
-	{
-		label cellI = cells_[i];
-		scalar volCell = cv[cellI];
-		magUbarAve += (flowDir_ & U[cellI])*volCell;
-		V_ += volCell;
-	}
+		Info << "cells_ size : " << cells_.size() << endl;
+		Info << "U size : " << U.size() << endl;
 
-	magUbarAve /= V_;
+		vector flowDir_ = vector(0, 0, 1);
+		scalar magUbarAve = 0.0;
+		scalar V_ = 0.0;
+		const scalarField& cv = mesh.V();
+		forAll(cells_, i)
+		{
+			label cellI = cells_[i];
+			scalar volCell = cv[cellI];
+			magUbarAve += (flowDir_ & U[cellI])*volCell;
+			V_ += volCell;
+		}
 
-	Info << "magUbarAve in direction "
-		<< flowDir_
-		<< " : " << magUbarAve << endl;
+		magUbarAve /= V_;
+
+		Info << "magUbarAve in direction "
+			<< flowDir_
+			<< " : " << magUbarAve << endl;
+
+		cellSetAveFile << runTime.timeName().c_str()
+			<< " " << magUbarAve << std::endl;
+
 	}
 
     return 0;
