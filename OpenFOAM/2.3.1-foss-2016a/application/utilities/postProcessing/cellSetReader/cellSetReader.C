@@ -6,10 +6,17 @@ int main( int argc, char *argv[] ) {
     Info << "Hello FOAM!" << endl; 
 
 	//argList::validArgs.append("flowDir");
+	timeSelector::addOptions();
 	#include "setRootCase.H"
 	//vector flowDir_ = vector(args[1]); // this is not working
     #include "createTime.H"
+	instantList timeDirs = timeSelector::select0(runTime, args);
     #include "createMesh.H"
+
+	forAll(timeDirs, timeI)
+	{
+	runTime.setTime(timeDirs[timeI], timeI);
+    Foam::Info<< "Time = " << runTime.timeName() << Foam::endl;
 
 	cellSet cells_
 	(
@@ -57,6 +64,7 @@ int main( int argc, char *argv[] ) {
 	Info << "magUbarAve in direction "
 		<< flowDir_
 		<< " : " << magUbarAve << endl;
+	}
 
     return 0;
 }

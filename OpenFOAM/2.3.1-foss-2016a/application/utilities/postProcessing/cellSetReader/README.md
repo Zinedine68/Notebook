@@ -25,6 +25,7 @@ cellSetReader -time 'someTime'
 `flowDir_` hard coded
 
 # Cope with limit
+上个版本不能够实现cellSetReader -time 'someTime'，仅仅是按照当前目录下所有的时间步来一步一步进行上诉计算，现在加入timeSelector可以实现仅仅对某个时间步算平均流场。要注意的是这里加上了一个forAll的时间循环，上一版没有加仍然可以循环（只是不受option -time 控制）。
 
 # Dig the mine of OpenFOAM
 Dependancy on meshTools is due to `cellSet.H` is there.
