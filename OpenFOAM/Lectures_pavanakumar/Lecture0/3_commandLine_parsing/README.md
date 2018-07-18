@@ -29,6 +29,15 @@ Omit creating object `args`. 这样main函数(其实是`class argList`的函数)
 ## 5_argumentInput.C
 用args，因为本来是一个stringList，所以不再要求args[1]是一个string?
 
+## 6_argumentInput.C
+string转换为float
+```bash
+$ ./argumentInput 5.0
+args[1] : "5.0"
+args[1] : 5.0
+d : 5
+```
+
 ## Note
 OpenFOAM's main seems to be the same as cplusplus standard : `int main( int argc, char *argv[] )`
 but if you don't add `argList::validArgs.append("someTime");` to the main function it will throw
