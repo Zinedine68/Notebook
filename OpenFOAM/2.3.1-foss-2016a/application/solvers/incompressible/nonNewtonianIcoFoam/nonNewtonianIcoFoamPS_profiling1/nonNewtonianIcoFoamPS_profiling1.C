@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
 	//userDefined
 	mkDir("userDefinedLog");
-	ofstream dataWritingHistory
+	std::ofstream dataWritingHistory
 	(
 	    fileName(string("userDefinedLog")/string("dataWritingHistory")).c_str(),
 		ios_base::app
